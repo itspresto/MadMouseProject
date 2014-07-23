@@ -4,11 +4,13 @@
 
 #define PIN 6
 
+//Setup for LED strips
 Adafruit_NeoPixel R = Adafruit_NeoPixel(72, 5, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel L = Adafruit_NeoPixel(72, 6, NEO_GRB + NEO_KHZ800);
 
 void setup() 
 {
+  //initializes both strips to blank
   R.begin();
   L.begin();
   R.show();
