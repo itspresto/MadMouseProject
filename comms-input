@@ -1,0 +1,35 @@
+void setup()
+{
+  //set Pins 8 and 9 to input
+  DDRB &= ~_BV(1);
+  DDRB &= ~_BV(2);
+}
+
+void loop()
+{
+  int state=0;
+  
+  
+    
+}
+
+//
+//  int inPin8 = 8;
+//  int inPin9 = 9;
+//  int state = 0;
+//
+//void setup()
+//{
+//  //set Pins 8 and 9 to input
+//  pinMode(inPin8, INPUT);
+//  pinMode(inPin9, INPUT);
+//}
+//
+//void loop()
+//{
+//  int 1stplace=0;
+//  int 2ndplace=0; 
+//  1stplace = digitalRead(inPin8);
+//  2ndplace = digitalRead(inPin9);
+//  
+//}
