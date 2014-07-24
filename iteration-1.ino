@@ -29,6 +29,40 @@ void loop()
   //Get lighting mode from analog pin
   LightingMode = analogRead(analogInPin);
   
+  switch(LightingMode){
+  case(250):
+  {
+    //Full turbo
+    
+    break;
+  }
+  case(200):
+  {
+    //half turbo
+    
+    break;
+  }
+  case(150):
+  {
+    //normal enabled
+    
+    break;
+  }
+  case(100):
+  {
+    //disabled
+    
+    break;
+  }
+  default:
+  {
+    //disabled
+    
+    break;
+  }
+
+
+/*  
   // Some example procedures showing how to display to the pixels:
   
   colorWipe(R.Color(255, 0, 0), 50); // Red
@@ -50,6 +84,8 @@ void loop()
   rainbow(20);
   rainbowCycle(20);
   theaterChaseRainbow(50);
+*/  
+
 }
 
 // Fill the dots one after the other with a color
