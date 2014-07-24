@@ -37,13 +37,13 @@ void enabled() {
   }
   else if((usb1.getBtn(BTN6, NORMAL)) == 1)
   {
-    LMID = smthL*.5;
-    RMID = smthR*.5;
+    LMID = smthL*.7;
+    RMID = smthR*.7;
   }
   else
   {
-    LMID = smthL*.25;
-    RMID = smthR*.25;
+    LMID = smthL*.35;
+    RMID = smthR*.35;
   }
   
   LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
