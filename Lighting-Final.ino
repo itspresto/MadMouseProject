@@ -33,19 +33,19 @@ void loop()
   case(250):
   {
     //Full turbo
-    
+    theaterChaseRainbow(20);
     break;
   }
   case(200):
   {
     //half turbo
-    
+    theaterChaseRainbow(40);
     break;
   }
   case(150):
   {
     //normal enabled
-    
+    theaterChaseRainbow(80);
     break;
   }
   case(100):
