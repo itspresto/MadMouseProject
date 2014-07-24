@@ -1,0 +1,16 @@
+void setup()
+{
+  //set Pins 8 and 9 to output
+  DDRB |= _BV(1) | _BV(2);
+}
+
+void loop()
+{
+  //set Lo
+  PORTB &= _BV(1)
+  PORTB &= _BV(2)
+  
+  //set Hi
+  PORTB |= _BV(1)
+  PORTB |= _BV(2)
+}
