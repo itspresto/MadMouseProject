@@ -50,15 +50,16 @@ void loop()
   }
   case(100):
   {
-    //disabled
-    
+    //disabled with comms
+    theaterChase(R.Color(60,   0,   0), 20); // Red
+    theaterChase(L.Color(60,   0,   0), 20); // Red        
     break;
   }
   default:
   {
     //disabled
-    theaterChase(R.Color(60,   0,   0), 25); // Red
-    theaterChase(L.Color(60,   0,   0), 25); // Red    
+    theaterChase(R.Color(60,   0,   0), 100); // Red
+    theaterChase(L.Color(60,   0,   0), 100); // Red    
     break;
   }
 
