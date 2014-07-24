@@ -57,7 +57,8 @@ void loop()
   default:
   {
     //disabled
-    
+    theaterChase(R.Color(60,   0,   0), 25); // Red
+    theaterChase(L.Color(60,   0,   0), 25); // Red    
     break;
   }
 
