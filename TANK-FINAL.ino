@@ -5,11 +5,16 @@
 
 /* I/O Setup */
 USBJoystick usb1('0');  // Assign the logitech USBJoystick object to bundle 0
+uint16_t LightingMode = 0;
+int analogPinOut = 8;
 
 void setup()
 {
   /* Initiate comms */
   RobotOpen.begin();
+  
+  /* Initiate lighting comms */
+  pinMode(analogPinOut, OUTPUT);
 }
 
 
@@ -34,16 +39,19 @@ void enabled() {
   {
     LMID = smthL;
     RMID = smthR;
+    LightingMode = 250;
   }
   else if((usb1.getBtn(BTN6, NORMAL)) == 1)
   {
     LMID = smthL*.7;
     RMID = smthR*.7;
+    LightingMode = 200;
   }
   else
   {
     LMID = smthL*.35;
     RMID = smthR*.35;
+    LightingMode = 150;
   }
   
   LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
@@ -62,6 +70,9 @@ void enabled() {
  */
 void disabled() {
   // PWMs are automatically disabled
+  
+  /*Set LightingMode*/
+  LightingMode = 100;
 }
 
 
@@ -76,7 +87,9 @@ void timedtasks() {
   RobotOpen.publishDigital(SIDECAR_PWM2, '2');   // Bundle Sidecar 2
   RobotOpen.publishDigital(SIDECAR_PWM3, '3');   // Bundle Sidecar 3
   RobotOpen.publishDigital(SIDECAR_PWM4, '4');   // Bundle Sidecar 4
-  RobotOpen.publishAnalog(ANALOG1, 'B:');   // Bundle B
+  
+  /*Write Lighting Mode to analog out pin*/
+  analogWrite(analogPinOut, LightingMode);
 }
 
 
