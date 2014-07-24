@@ -62,7 +62,7 @@ void loop()
     theaterChase(L.Color(60,   0,   0), 100); // Red    
     break;
   }
-
+  }
 
 /*  
   // Some example procedures showing how to display to the pixels:
