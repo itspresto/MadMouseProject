@@ -8,6 +8,10 @@
 Adafruit_NeoPixel R = Adafruit_NeoPixel(72, 5, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel L = Adafruit_NeoPixel(72, 6, NEO_GRB + NEO_KHZ800);
 
+//Setup for Analog communications and Lighting Mode
+uint16_t LightingMode = 0;
+int analogInPin = 8;
+
 void setup() 
 {
   //initializes both strips to blank
@@ -15,10 +19,16 @@ void setup()
   L.begin();
   R.show();
   L.show();
+  
+  //Initialize analog comms
+  pinMode(analogInPin, INPUT);
 }
 
 void loop() 
 {
+  //Get lighting mode from analog pin
+  LightingMode = analogRead(analogInPin);
+  
   // Some example procedures showing how to display to the pixels:
   
   colorWipe(R.Color(255, 0, 0), 50); // Red
