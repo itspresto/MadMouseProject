@@ -1,6 +1,9 @@
 RobotCode
 =========
 
-Mad Mouse Software 
+Welcome to the Mad Mouse Software Repository 
 
-This will be the center for Mad Mouse drive and lighting code
+TANK DRIVE is the current version of arduino code to go on the robot commanding arduino.
+
+Lighting Final is the current version of arduino code to go on the secondary lighting arduino
+
