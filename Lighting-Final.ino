@@ -33,19 +33,19 @@ void loop()
   case(250):
   {
     //Full turbo
-    theaterChaseRainbow(20);
+    rainbowStrobe(10);
     break;
   }
   case(200):
   {
     //half turbo
-    theaterChaseRainbow(40);
+    rainbowStrobe(25);
     break;
   }
   case(150):
   {
     //normal enabled
-    theaterChaseRainbow(80);
+    rainbowStrobe(50);
     break;
   }
   case(100):
@@ -113,6 +113,33 @@ void rainbow(uint8_t wait)
     {
       R.setPixelColor(i, Wheel((i+j) & 255));
       L.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    R.show();
+    L.show();
+    delay(wait);
+  }
+}
+
+//Needs fairly short wait times to be effective
+void rainbowStrobe(uint8_t wait) 
+{
+  uint16_t i, j, k;
+
+  for(j=0; j<256; j++) 
+  {
+    for(i=0; i<72; i++) 
+    {
+      R.setPixelColor(i, Wheel((i+j) & 255));
+      L.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    R.show();
+    L.show();
+    delay(wait);
+    
+    for(k=0; k<72; k++) 
+    {
+      R.setPixelColor(k, 0);
+      L.setPixelColor(k, 0);
     }
     R.show();
     L.show();
