@@ -84,6 +84,10 @@ void loop()
   rainbow(20);
   rainbowCycle(20);
   theaterChaseRainbow(50);
+  
+  //Possible way to break out of long lighting function?
+  if(analogRead(analogInPin) != 250){
+    break;}
 */  
 
 }
