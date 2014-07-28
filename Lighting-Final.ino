@@ -10,7 +10,7 @@ Adafruit_NeoPixel L = Adafruit_NeoPixel(72, 6, NEO_GRB + NEO_KHZ800);
 
 //Setup for Analog communications and Lighting Mode
 uint16_t LightingMode = 0;
-int analogInPin = 8;
+cosnt int analogInPin = 8;
 
 void setup() 
 {
