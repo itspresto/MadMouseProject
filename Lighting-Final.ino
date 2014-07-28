@@ -28,26 +28,31 @@ void loop()
 {
   //Get lighting mode from analog pin
   LightingMode = analogRead(analogInPin);
-  
-  if((LightingMode > 0)&&(LightingMode < 75))
-  {
-    //disabled wout/comms
-  }
-  else if((LightingMode > 75)&&(LightingMode < 125))
+
+  if((LightingMode > 75)&&(LightingMode < 125))
   {
     //disabled w/comms
+    flash(R.Color(0,255,0), 10); //Green
   }
   else if((LightingMode > 125)&&(LightingMode < 175))
   {
     //enabled in mode 1
+    rainbowCycle(20);
   }
   else if((LightingMode > 175)&&(LightingMode < 225))
   {
     //enabled in mode 2
+    rainbowCycle(10);
   }
   else if((LightingMode > 225)&&(LightingMode < 255))
   {
     //enabled in mode 3
+    rainbowStrobe(5);
+  }
+  else
+  {
+    //disabled w/outcomms
+    flash(R.Color(255,0,0), 10); //Red
   }
   
 /*  
@@ -73,11 +78,30 @@ void loop()
   rainbowCycle(20);
   theaterChaseRainbow(50);
   
+  flash(R.Color(255,0,0), 50); //Red
+  
   //Possible way to break out of long lighting function?
   if(analogRead(analogInPin) != 250){
     break;}
 */  
 
+}
+
+//flashes the strips with a color three times
+void flash(uint32_t c, uint8_t wait) 
+{
+  delay(wait);
+  for(uint16_t j=0; j<3; j++)
+  {
+    for(uint16_t i=0; i<72; i++) 
+    {
+        R.setPixelColor(i, c);
+        L.setPixelColor(i, c);
+    }
+    R.show();
+    L.show();
+    delay(wait);
+  }
 }
 
 // Fill the dots one after the other with a color
@@ -142,8 +166,8 @@ void rainbowCycle(uint8_t wait)
 {
   uint16_t i, j;
 
-  for(j=0; j<256*5; j++) 
-  { // 5 cycles of all colors on wheel
+  for(j=0; j<256; j++) 
+  { 
     for(i=0; i<72; i++) 
     {
       R.setPixelColor(i, Wheel(((i * 256 / 72) + j) & 255));
