@@ -7,7 +7,7 @@ USBJoystick usb1('0');  // Assign the logitech USBJoystick object to bundle 0
 
 /* Global Variables */
 uint16_t LightingMode = 0;
-int analogPinOut = 8;
+const int analogPinOut = 8;
 
 void setup()
 {
