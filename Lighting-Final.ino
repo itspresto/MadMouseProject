@@ -29,39 +29,27 @@ void loop()
   //Get lighting mode from analog pin
   LightingMode = analogRead(analogInPin);
   
-  switch(LightingMode){
-  case(250):
+  if((LightingMode > 0)&&(LightingMode < 75))
   {
-    //Full turbo
-    rainbowStrobe(10);
-    break;
+    //disabled wout/comms
   }
-  case(200):
+  else if((LightingMode > 75)&&(LightingMode < 125))
   {
-    //half turbo
-    rainbowStrobe(25);
-    break;
+    //disabled w/comms
   }
-  case(150):
+  else if((LightingMode > 125)&&(LightingMode < 175))
   {
-    //normal enabled
-    rainbowStrobe(50);
-    break;
+    //enabled in mode 1
   }
-  case(100):
+  else if((LightingMode > 175)&&(LightingMode < 225))
   {
-    //disabled with comms
-    theaterChase(R.Color(60,   0,   0), 20); // Red
-    break;
+    //enabled in mode 2
   }
-  default:
+  else if((LightingMode > 225)&&(LightingMode < 255))
   {
-    //disabled
-    theaterChase(R.Color(60,   0,   0), 100); // Red
-    break;
+    //enabled in mode 3
   }
-  }
-
+  
 /*  
   // Some example procedures showing how to display to the pixels:
   
