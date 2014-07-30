@@ -87,7 +87,7 @@ void loop()
 
 }
 
-//flashes the strips with a color three times
+//flashes the entire strip with a color three times
 void flash(uint32_t c, uint8_t wait) 
 {
   delay(wait);
