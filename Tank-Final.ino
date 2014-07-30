@@ -102,6 +102,7 @@ void timedtasks() {
   RobotOpen.publishDigital(SIDECAR_PWM2, '2');   // Bundle Sidecar 2
   RobotOpen.publishDigital(SIDECAR_PWM3, '3');   // Bundle Sidecar 3
   RobotOpen.publishDigital(SIDECAR_PWM4, '4');   // Bundle Sidecar 4
+  RobotOpen.publishAnalog(analogPinOut, 'L');    // LighingMode being sent by Driver arduino
   
   /*Write Lighting Mode*/
   analogWrite(analogPinOut, LightingMode);
