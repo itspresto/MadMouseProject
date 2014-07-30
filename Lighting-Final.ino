@@ -239,16 +239,16 @@ uint32_t Wheel(byte WheelPos)
 {
   if(WheelPos < 85) 
   {
-    return R.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+    return R.Color((WheelPos * 3)-127, (255 - WheelPos * 3)-127, 0);
   }
   else if(WheelPos < 170) 
   {
     WheelPos -= 85;
-    return R.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+    return R.Color((255 - WheelPos * 3)-127, 0, (WheelPos * 3)-127);
   }
   else 
   {
     WheelPos -= 170;
-    return R.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+    return R.Color(0, (WheelPos * 3)-127, (255 - WheelPos * 3)-127);
   }
 }
