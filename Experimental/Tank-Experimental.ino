@@ -7,9 +7,11 @@ USBJoystick usb1('0');  // Assign the logitech USBJoystick object to bundle 0
 
 /* Global Variables */
 uint16_t LightingMode = 0;
+uint16_t JoystickMode = 0;
 const int analogPinOut = 8;
-const int analogJoyOut1 = 9;
-const int analogJoyOut2 = 10;
+const int analogJoyIndicator = 9;
+const int analogJoyOut1 = 10;
+const int analogJoyOut2 = 11;
 int JoyY = 0;
 int JoyX = 0;
 
@@ -20,6 +22,7 @@ void setup()
   
   /* Initiate lighting comms */
   pinMode(analogPinOut, OUTPUT);
+  pinMode(analogJoyIndicator, OUTPUT);
   pinMode(analogJoyOut1, OUTPUT);
   pinMode(analogJoyOut2, OUTPUT);
 }
@@ -33,12 +36,15 @@ void enabled() {
   /* Lighting exception */ 
   if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to A button!!!!
   {
+    JoystickMode = 100;
+    
     int left-y-to-send = usb1.makePWM(ANALOG_LEFTY, NORMAL);
     int left-x-to-send = usb1.makePWM(ANALOG_LEFTX, NORMAL);
     
     JoyY = left-y-to-send;
     JoyX = left-x-to-send;
-    
+   
+    analogWrite(analogJoyIndicator, JoystickMode);
     analogWrite(analogJoyOut1, JoyY);
     analogWrite(analogJoyOut2, JoyX);
   }
@@ -107,6 +113,7 @@ void disabled() {
   
   /*Set Lighting*/
   LightingMode = 100;
+  JoystickMode = 0;
 }
 
 /* This loop ALWAYS runs - only place code here that can run during a disabled state
@@ -125,11 +132,8 @@ void timedtasks() {
   RobotOpen.publishAnalog(analogPinOut, 'L');    // LighingMode being sent by Driver arduino
   
   
-  if(usb1.getBtn(BTN1000000, INVERT)) == 1) //find and change btn to A button!!!!
-  {
-    /*Write Lighting Mode*/
-    analogWrite(analogPinOut, LightingMode);
-  }
+  analogWrite(analogJoystickIndicator, JoystickMode);
+  analogWrite(analogPinOut, LightingMode);
 }
 
 
