@@ -5,7 +5,7 @@
 /* I/O Setup */
 USBJoystick usb1('0');  // Assign the logitech USBJoystick object to bundle 0
 
-/* Global Variables */
+/* Initialize Global Variables */
 uint16_t LightingMode = 0;
 uint16_t JoystickMode = 0;
 const int analogPinOut = 8;
@@ -62,11 +62,7 @@ void enabled()
       int left-x-to-send = usb1.makePWM(ANALOG_LEFTX, NORMAL);
     
       JoyY = left-y-to-send;
-      JoyX = left-x-to-send;
-   
-      analogWrite(analogJoyIndicator, JoystickMode);
-      analogWrite(analogJoyOut1, JoyY);
-      analogWrite(analogJoyOut2, JoyX);
+      JoyX = left-x-to-send;  
       
       break;
     }
@@ -79,10 +75,6 @@ void enabled()
     
       JoyY = left-y-to-send;
       JoyX = left-x-to-send;
-   
-      analogWrite(analogJoyIndicator, JoystickMode);
-      analogWrite(analogJoyOut1, JoyY);
-      analogWrite(analogJoyOut2, JoyX);
       
       break;
     }
@@ -169,6 +161,8 @@ void disabled() {
   
   /*Set Lighting*/
   LightingMode = 100;
+  
+  /*Set JoystickMode*/
   JoystickMode = 0;
 }
 
@@ -187,9 +181,10 @@ void timedtasks() {
   RobotOpen.publishDigital(SIDECAR_PWM4, '4');   // Bundle Sidecar 4
   RobotOpen.publishAnalog(analogPinOut, 'L');    // LighingMode being sent by Driver arduino
   
-  
-  analogWrite(analogJoystickIndicator, JoystickMode);
   analogWrite(analogPinOut, LightingMode);
+  analogWrite(analogJoyIndicator, JoystickMode);
+  analogWrite(analogJoyOut1, JoyY);
+  analogWrite(analogJoyOut2, JoyX);
 }
 
 
