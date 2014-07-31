@@ -31,76 +31,132 @@ void setup()
 /* This is your primary robot loop - all of your code
  * should live here that allows the robot to operate
  */
-void enabled() {
+void enabled() 
+{
+  uint8_t MainSwitch = 0;
   
-  /* Lighting exception */ 
-  if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to A button!!!!
+  if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to A
   {
-    JoystickMode = 100;
+    MainSwitch = 1;
+  }
+  else if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to B
+  {
+    MainSwitch = 2;
+  }
+  else if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to X
+  {
+    MainSwitch = 3;
+  }
+  else if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to Y
+  {
+    MainSwitch = 4;
+  }
+  
+  switch(MainSwitch)
+  {
+    case(1):
+    {
+      JoystickMode = 100;
     
-    int left-y-to-send = usb1.makePWM(ANALOG_LEFTY, NORMAL);
-    int left-x-to-send = usb1.makePWM(ANALOG_LEFTX, NORMAL);
+      int left-y-to-send = usb1.makePWM(ANALOG_LEFTY, NORMAL);
+      int left-x-to-send = usb1.makePWM(ANALOG_LEFTX, NORMAL);
     
-    JoyY = left-y-to-send;
-    JoyX = left-x-to-send;
+      JoyY = left-y-to-send;
+      JoyX = left-x-to-send;
    
-    analogWrite(analogJoyIndicator, JoystickMode);
-    analogWrite(analogJoyOut1, JoyY);
-    analogWrite(analogJoyOut2, JoyX);
-  }
+      analogWrite(analogJoyIndicator, JoystickMode);
+      analogWrite(analogJoyOut1, JoyY);
+      analogWrite(analogJoyOut2, JoyX);
+      
+      break;
+    }
+    case(2):
+    {
+      JoystickMode = 150;
+      
+      int left-y-to-send = usb1.makePWM(ANALOG_LEFTY, NORMAL);
+      int left-x-to-send = usb1.makePWM(ANALOG_LEFTX, NORMAL);
+    
+      JoyY = left-y-to-send;
+      JoyX = left-x-to-send;
+   
+      analogWrite(analogJoyIndicator, JoystickMode);
+      analogWrite(analogJoyOut1, JoyY);
+      analogWrite(analogJoyOut2, JoyX);
+      
+      break;
+    }
+    
+    case(3):
+    {
+      JoystickMode = 200;
+      break;
+    }
+
+    case(4):
+    {
+      JoystickMode = 250;
+      break;
+    }
+
+    default:
+    {
+      /* Variable Library */
+      int LFINAL=0;
+      int RFINAL=0;
+      int LMID=0;
+      int RMID=0;
   
-  else{
-  /* Variable Library */
-  int LFINAL=0;
-  int RFINAL=0;
-  int LMID=0;
-  int RMID=0;
-  
-  // Initial reading of Joysticks
-  int LEFTS = usb1.makePWM(ANALOG_LEFTY, INVERT) - 127;
-  int RITES = usb1.makePWM(ANALOG_RIGHTY, NORMAL) - 127;
+      // Initial reading of Joysticks
+      int LEFTS = usb1.makePWM(ANALOG_LEFTY, INVERT) - 127;
+      int RITES = usb1.makePWM(ANALOG_RIGHTY, NORMAL) - 127;
  
-  // Ternarys disregard slight bumps or deadzone interference
-  int smthL = (LEFTS >= 8 || LEFTS <= -8) ? LEFTS : 0;
-  int smthR = (RITES >= 8 || RITES <= -8) ? RITES : 0;
+      // Ternarys disregard slight bumps or deadzone interference
+      int smthL = (LEFTS >= 8 || LEFTS <= -8) ? LEFTS : 0;
+      int smthR = (RITES >= 8 || RITES <= -8) ? RITES : 0;
   
-  // Turbo Button Logic
-  // Checks for button presses
-  // Case for both buttons  
-  if(((usb1.getBtn(BTN6, NORMAL)) == 1)&&((usb1.getBtn(BTN5, NORMAL))==1))
-  {
-    // Sets full values for maximum possible power
-    LMID = smthL;
-    RMID = smthR;
-    LightingMode = 250;
-  }
+      // Turbo Button Logic
+      // Checks for button presses
+      // Case for both buttons  
+      if(((usb1.getBtn(BTN6, NORMAL)) == 1)&&((usb1.getBtn(BTN5, NORMAL))==1))
+      {
+        // Sets full values for maximum possible power
+        LMID = smthL;
+        RMID = smthR;
+        LightingMode = 250;
+      }
   
-  // Case for right button
-  else if((usb1.getBtn(BTN6, NORMAL)) == 1)
-  {
-    // Sets values for midspeed power
-    LMID = smthL*.7;
-    RMID = smthR*.7;
-    LightingMode = 200;
-  }
-  else
-  {
-    // Sets values for Low power slower movement
-    LMID = smthL*.35;
-    RMID = smthR*.35;
-    LightingMode = 150;
-  }
+      // Case for right button
+      else if((usb1.getBtn(BTN6, NORMAL)) == 1)
+      {
+        // Sets values for midspeed power
+        LMID = smthL*.7;
+        RMID = smthR*.7;
+        LightingMode = 200;
+      }
+      else
+      {
+        // Sets values for Low power slower movement
+        LMID = smthL*.35;
+        RMID = smthR*.35;
+        LightingMode = 150;
+      }
   
-  // Secondary smoothing for redundancy reasons
-  LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
-  RFINAL = (RMID >= 8 || RMID <= -8) ? RMID : 0;
+      // Secondary smoothing for redundancy reasons
+      LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
+      RFINAL = (RMID >= 8 || RMID <= -8) ? RMID : 0;
   
-  // Pushing final values to sidecar PWM Digital IOs
-  RobotOpen.setPWM(SIDECAR_PWM1, LFINAL + 130);
-  RobotOpen.setPWM(SIDECAR_PWM2, LFINAL + 130);
-  RobotOpen.setPWM(SIDECAR_PWM3, RFINAL + 128);
-  RobotOpen.setPWM(SIDECAR_PWM4, RFINAL + 128);
+      // Pushing final values to sidecar PWM Digital IOs
+      RobotOpen.setPWM(SIDECAR_PWM1, LFINAL + 130);
+      RobotOpen.setPWM(SIDECAR_PWM2, LFINAL + 130);
+      RobotOpen.setPWM(SIDECAR_PWM3, RFINAL + 128);
+      RobotOpen.setPWM(SIDECAR_PWM4, RFINAL + 128);
+
+      break;
+    }
+  
   }
+
 }
 
 
