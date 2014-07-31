@@ -10,7 +10,11 @@ Adafruit_NeoPixel L = Adafruit_NeoPixel(72, 6, NEO_GRB + NEO_KHZ800);
 
 //Setup for Analog communications and Lighting Mode
 uint16_t LightingMode = 0;
-cosnt int analogInPin = 8;
+const int analogInPin = 8;
+const int analogJoyIn1 = 9;
+const int analogJoyIn2 = 10;
+int JoyY = 0;
+int JoyX = 0;
 
 void setup() 
 {
@@ -22,37 +26,60 @@ void setup()
   
   //Initialize analog comms
   pinMode(analogInPin, INPUT);
+  pinMode(analogJoyIn1, INPUT);
+  pinMode(analogJoyIn2, INPUT);
 }
 
 void loop() 
 {
   //Get lighting mode from analog pin
   LightingMode = analogRead(analogInPin);
-
-  if((LightingMode > 75)&&(LightingMode < 125))
-  {
-    //disabled w/comms
-    flash(R.Color(0,255,0), 10); //Green
+  JoyY = analogRead(analogJoyIn1);
+  JoyX = analogRead(analogJoyIn2);
+  
+  int MainSwitch = 0;
+  
+  if((JoyY >= 10) || (JoyX >= 10)){
+    MainSwitch = 1;
   }
-  else if((LightingMode > 125)&&(LightingMode < 175))
+  
+  switch(MainSwitch)
   {
-    //enabled in mode 1
-    rainbowCycle(20);
-  }
-  else if((LightingMode > 175)&&(LightingMode < 225))
-  {
-    //enabled in mode 2
-    rainbowCycle(10);
-  }
-  else if((LightingMode > 225)&&(LightingMode < 255))
-  {
-    //enabled in mode 3
-    rainbowStrobe(5);
-  }
-  else
-  {
-    //disabled w/outcomms
-    flash(R.Color(255,0,0), 10); //Red
+    case(1):
+    {
+      
+      
+      break;
+    }
+    default:
+    {
+      if((LightingMode > 75)&&(LightingMode < 125))
+      {
+        //disabled w/comms
+        flash(R.Color(0,255,0), 10); //Green
+      }
+      else if((LightingMode > 125)&&(LightingMode < 175))
+      {
+        //enabled in mode 1
+        rainbowCycle(20);
+      }
+      else if((LightingMode > 175)&&(LightingMode < 225))
+      {
+        //enabled in mode 2
+        rainbowCycle(10);
+      }
+      else if((LightingMode > 225)&&(LightingMode < 255))
+      {
+        //enabled in mode 3
+        rainbowStrobe(5);
+      }
+      else
+      {
+        //disabled w/outcomms
+        flash(R.Color(255,0,0), 10); //Red
+      }
+      break;
+    }
   }
   
 /*  
