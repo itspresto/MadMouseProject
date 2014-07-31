@@ -143,7 +143,11 @@ void enabled()
       RobotOpen.setPWM(SIDECAR_PWM2, LFINAL + 130);
       RobotOpen.setPWM(SIDECAR_PWM3, RFINAL + 128);
       RobotOpen.setPWM(SIDECAR_PWM4, RFINAL + 128);
-
+      
+      JoystickMode = 0;
+      JoyY = 0;
+      JoyX = 0;
+      
       break;
     }
   
