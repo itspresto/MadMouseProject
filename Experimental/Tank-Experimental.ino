@@ -124,8 +124,12 @@ void timedtasks() {
   RobotOpen.publishDigital(SIDECAR_PWM4, '4');   // Bundle Sidecar 4
   RobotOpen.publishAnalog(analogPinOut, 'L');    // LighingMode being sent by Driver arduino
   
-  /*Write Lighting Mode*/
-  analogWrite(analogPinOut, LightingMode);
+  
+  if(usb1.getBtn(BTN1000000, INVERT)) == 1) //find and change btn to A button!!!!
+  {
+    /*Write Lighting Mode*/
+    analogWrite(analogPinOut, LightingMode);
+  }
 }
 
 
