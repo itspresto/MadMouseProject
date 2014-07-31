@@ -8,6 +8,10 @@ USBJoystick usb1('0');  // Assign the logitech USBJoystick object to bundle 0
 /* Global Variables */
 uint16_t LightingMode = 0;
 const int analogPinOut = 8;
+const int analogJoyOut1 = 9;
+const int analogJoyOut2 = 10;
+int JoyY = 0;
+int JoyX = 0;
 
 void setup()
 {
@@ -16,6 +20,8 @@ void setup()
   
   /* Initiate lighting comms */
   pinMode(analogPinOut, OUTPUT);
+  pinMode(analogJoyOut1, OUTPUT);
+  pinMode(analogJoyOut2, OUTPUT);
 }
 
 
@@ -24,6 +30,20 @@ void setup()
  */
 void enabled() {
   
+  /* Lighting exception */ 
+  if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to A button!!!!
+  {
+    int left-y-to-send = usb1.makePWM(ANALOG_LEFTY, NORMAL);
+    int left-x-to-send = usb1.makePWM(ANALOG_LEFTX, NORMAL);
+    
+    JoyY = left-y-to-send;
+    JoyX = left-x-to-send;
+    
+    analogWrite(analogJoyOut1, JoyY);
+    analogWrite(analogJoyOut2, JoyX);
+  }
+  
+  else{
   /* Variable Library */
   int LFINAL=0;
   int RFINAL=0;
@@ -74,6 +94,7 @@ void enabled() {
   RobotOpen.setPWM(SIDECAR_PWM2, LFINAL + 130);
   RobotOpen.setPWM(SIDECAR_PWM3, RFINAL + 128);
   RobotOpen.setPWM(SIDECAR_PWM4, RFINAL + 128);
+  }
 }
 
 
