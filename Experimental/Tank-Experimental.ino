@@ -189,6 +189,12 @@ void timedtasks() {
   analogWrite(analogJoyIndicator, JoystickMode);
   analogWrite(analogJoyOut1, JoyY);
   analogWrite(analogJoyOut2, JoyX);
+  
+  /* Set Global Vars back to zero! */
+  JoyY = 0;
+  JoyX = 0;
+  JoystickMode = 0;
+  LightingMode = 0:
 }
 
 
