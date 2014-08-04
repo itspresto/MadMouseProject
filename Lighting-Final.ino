@@ -34,20 +34,17 @@ void loop()
     //disabled w/comms
     flash(R.Color(0,255,0), 10); //Green
   }
-  else if((LightingMode > 125)&&(LightingMode < 175))
+  else if((LightingMode > 150)&&(LightingMode < 200))
   {
+    //looking for 175
     //enabled in mode 1
     rainbowCycle(20);
   }
-  else if((LightingMode > 175)&&(LightingMode < 225))
+  else if((LightingMode > 200)&&(LightingMode < 250))
   {
+    //looking for 225
     //enabled in mode 2
     rainbowCycle(10);
-  }
-  else if((LightingMode > 225)&&(LightingMode < 255))
-  {
-    //enabled in mode 3
-    rainbowStrobe(5);
   }
   else
   {
@@ -55,17 +52,13 @@ void loop()
     flash(R.Color(255,0,0), 10); //Red
   }
   
-/*  
-  // Some example procedures showing how to display to the pixels:
-  
+/*  LIGHITNG FUNCTION BANK:
   colorWipe(R.Color(255, 0, 0), 50); // Red
   colorWipe(L.Color(255, 0, 0), 50); // Red
   colorWipe(R.Color(0, 255, 0), 50); // Green
   colorWipe(L.Color(0, 255, 0), 50); // Green
   colorWipe(R.Color(0, 0, 255), 50); // Blue
   colorWipe(L.Color(0, 0, 255), 50); // Blue
-  
-  // Send a theater pixel chase in...
   
   theaterChase(R.Color(127, 127, 127), 50); // White
   theaterChase(L.Color(127, 127, 127), 50); // White
@@ -90,13 +83,23 @@ void loop()
 //flashes the entire strip with a color three times
 void flash(uint32_t c, uint8_t wait) 
 {
-  delay(wait);
   for(uint16_t j=0; j<3; j++)
   {
+    //turn all on
     for(uint16_t i=0; i<72; i++) 
     {
         R.setPixelColor(i, c);
         L.setPixelColor(i, c);
+    }
+    R.show();
+    L.show();
+    delay(wait);
+    
+    //turn all off
+    for(uint16_t k=0; k<72; k++) 
+    {
+        R.setPixelColor(i, 0);
+        L.setPixelColor(i, 0);
     }
     R.show();
     L.show();
