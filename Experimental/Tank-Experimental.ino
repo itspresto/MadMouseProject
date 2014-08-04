@@ -35,21 +35,25 @@ void enabled()
 {
   uint8_t MainSwitch = 0;
   
-  if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to A
+  if(usb1.getBtn(BTN1, NORMAL) == 1) //find and change btn to A
   {
     MainSwitch = 1;
   }
-  else if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to B
+  else if(usb1.getBtn(BTN2, NORMAL) == 1) //find and change btn to B
   {
     MainSwitch = 2;
   }
-  else if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to X
+  else if(usb1.getBtn(BTN3, NORMAL) == 1) //find and change btn to X
   {
     MainSwitch = 3;
   }
-  else if(usb1.getBtn(BTN1000000, NORMAL)) == 1) //find and change btn to Y
+  else if(usb1.getBtn(BTN4, NORMAL) == 1) //find and change btn to Y
   {
     MainSwitch = 4;
+  }
+  else if(usb1.getBtn(BTN5, NORMAL) == 1) //left bumper
+  {
+    MainSwitch = 5;
   }
   
   switch(MainSwitch)
@@ -90,7 +94,56 @@ void enabled()
       JoystickMode = 250;
       break;
     }
-
+    case(5):
+    {
+      /* Variable Library */
+      int LFINAL=0;
+      int RFINAL=0;
+      int LMID=0;
+      int RMID=0;
+  
+      // Initial reading of Joysticks
+      int LEFTS = usb1.makePWM(ANALOG_LEFTY, INVERT) - 127;
+      int RITES = usb1.makePWM(ANALOG_RIGHTY, NORMAL) - 127;
+ 
+      // Ternarys disregard slight bumps or deadzone interference
+      int smthL = (LEFTS >= 8 || LEFTS <= -8) ? LEFTS : 0;
+      int smthR = (RITES >= 8 || RITES <= -8) ? RITES : 0;
+  
+      // Turbo Button Logic
+      // Checks for button presses
+      // btn6 is right bumper, btn5 is left bumper  
+      if((usb1.getBtn(BTN6, NORMAL)) == 1)
+      {
+        // Sets full values for maximum possible power
+        LMID = smthL;
+        RMID = smthR;
+        LightingMode = 225;
+      }
+      else
+      {
+        // Sets values for Low power slower movement
+        LMID = smthL*.5;
+        RMID = smthR*.5;
+        LightingMode = 175;
+      }
+  
+      // Secondary smoothing for redundancy reasons
+      LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
+      RFINAL = (RMID >= 8 || RMID <= -8) ? RMID : 0;
+  
+      // Pushing final values to sidecar PWM Digital IOs
+      RobotOpen.setPWM(SIDECAR_PWM1, LFINAL + 130);
+      RobotOpen.setPWM(SIDECAR_PWM2, LFINAL + 130);
+      RobotOpen.setPWM(SIDECAR_PWM3, RFINAL + 128);
+      RobotOpen.setPWM(SIDECAR_PWM4, RFINAL + 128);
+      
+      JoystickMode = 50;
+      JoyY = 0;
+      JoyX = 0;
+      
+      break;
+    }
     default:
     {
       /* Variable Library */
@@ -109,29 +162,20 @@ void enabled()
   
       // Turbo Button Logic
       // Checks for button presses
-      // Case for both buttons  
-      if(((usb1.getBtn(BTN6, NORMAL)) == 1)&&((usb1.getBtn(BTN5, NORMAL))==1))
+      // btn6 is right bumper, btn5 is left bumper  
+      if((usb1.getBtn(BTN6, NORMAL)) == 1)
       {
         // Sets full values for maximum possible power
         LMID = smthL;
         RMID = smthR;
-        LightingMode = 250;
-      }
-  
-      // Case for right button
-      else if((usb1.getBtn(BTN6, NORMAL)) == 1)
-      {
-        // Sets values for midspeed power
-        LMID = smthL*.7;
-        RMID = smthR*.7;
-        LightingMode = 200;
+        LightingMode = 225;
       }
       else
       {
         // Sets values for Low power slower movement
-        LMID = smthL*.35;
-        RMID = smthR*.35;
-        LightingMode = 150;
+        LMID = smthL*.5;
+        RMID = smthR*.5;
+        LightingMode = 175;
       }
   
       // Secondary smoothing for redundancy reasons
