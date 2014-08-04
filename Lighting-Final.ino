@@ -27,7 +27,9 @@ void setup()
 void loop() 
 {
   //Get lighting mode from analog pin
-  LightingMode = analogRead(analogInPin);
+  
+  //analogRead values are from 0 to 1023, this program expects 1/4 of that
+  LightingMode = analogRead(analogInPin)*.25;
 
   if((LightingMode > 75)&&(LightingMode < 125))
   {
