@@ -40,29 +40,20 @@ void enabled() {
   
   // Turbo Button Logic
   // Checks for button presses
-  // Case for both buttons  
-  if(((usb1.getBtn(BTN6, NORMAL)) == 1)&&((usb1.getBtn(BTN5, NORMAL))==1))
+  // Case for right bumper 
+  if((usb1.getBtn(BTN6, NORMAL)) == 1)
   {
     // Sets full values for maximum possible power
     LMID = smthL;
     RMID = smthR;
-    LightingMode = 250;
-  }
-  
-  // Case for right button
-  else if((usb1.getBtn(BTN6, NORMAL)) == 1)
-  {
-    // Sets values for midspeed power
-    LMID = smthL*.7;
-    RMID = smthR*.7;
-    LightingMode = 200;
+    LightingMode = 225;
   }
   else
   {
-    // Sets values for Low power slower movement
-    LMID = smthL*.35;
-    RMID = smthR*.35;
-    LightingMode = 150;
+    // Sets values for Low power 'slower' movement
+    LMID = smthL*.50;
+    RMID = smthR*.50;
+    LightingMode = 175;
   }
   
   // Secondary smoothing for redundancy reasons
