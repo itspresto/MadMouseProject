@@ -10,7 +10,7 @@ Adafruit_NeoPixel L = Adafruit_NeoPixel(72, 6, NEO_GRB + NEO_KHZ800);
 
 //Setup for Analog communications and Lighting Mode
 uint16_t LightingMode = 0;
-cosnt int analogInPin = 8;
+const int analogInPin = 8;
 
 void setup() 
 {
@@ -100,8 +100,8 @@ void flash(uint32_t c, uint8_t wait)
     //turn all off
     for(uint16_t k=0; k<72; k++) 
     {
-        R.setPixelColor(i, 0);
-        L.setPixelColor(i, 0);
+        R.setPixelColor(k, 0);
+        L.setPixelColor(k, 0);
     }
     R.show();
     L.show();
