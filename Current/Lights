@@ -1,0 +1,326 @@
+#include <Adafruit_NeoPixel.h>
+
+//Setup for LED strips
+Adafruit_NeoPixel R = Adafruit_NeoPixel(72, 5, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel L = Adafruit_NeoPixel(72, 6, NEO_GRB + NEO_KHZ800);
+
+//Setup for communications and Lighting Mode
+uint8_t LightingMode = 0;
+
+int comm1 = A0;
+int comm4 = A1;
+int comm3 = A2;
+int comm2 = A3;
+
+
+void setup() 
+{
+  //initializes both strips to blank
+  R.begin();
+  L.begin();
+  R.show();
+  L.show();
+  
+  /* Initiate lighting comms */
+  pinMode(comm1, INPUT);
+  pinMode(comm2, INPUT);
+  pinMode(comm3, INPUT);
+  pinMode(comm4, INPUT);
+}
+
+void loop() 
+{ 
+  /* Multiplex Out for Setting up the LighingMode */
+  if(digitalRead(comm1) == LOW){
+    if(digitalRead(comm2) == LOW){
+      if(digitalRead(comm3) == LOW){
+        if(digitalRead(comm4) == LOW)
+        {
+          LightingMode = 1; // 0 0 0 0
+        }
+        else if(digitalRead(comm4) == HIGH)
+        {
+          LightingMode = 2; // 0 0 0 1
+        }
+      }
+      if(digitalRead(comm3) == HIGH){
+        if(digitalRead(comm4) == LOW)
+        {
+          LightingMode = 3; // 0 0 1 0
+        }
+        else if(digitalRead(comm4) == HIGH)
+        {
+          LightingMode = 4; // 0 0 1 1
+        }
+      }
+    }
+
+  
+  /* Switch Case for LightingMode 
+     This is where you customize LED Display paramaters
+  */
+  switch(LightingMode)
+  {
+    case 1:
+    { //disabled 0 0 0 0
+      theaterChase(R.Color(20,   20,   20), 2); // Red
+      break;
+    }
+    case 2:
+    { //enabled, default 0 0 0 1
+      theaterChase(L.Color(0,   20,   0), 25); // Green
+      break
+    }
+    case 3:
+    { //LB Active 0 0 1 0
+      //rainbowStrobe(10);
+      break;
+    }
+    case 4:
+    { //RB Active 0 0 1 1
+      
+      break;
+    }
+    case 5:
+    { //A Active 0 1 0 0
+      
+      break;
+    }
+    case 6:
+    { //B Active 0 1 0 1
+      
+      break;
+    }
+    case 7:
+    { //X Active 0 1 1 0
+      
+      break;
+    }
+    case 8:
+    { //Y Active 0 1 1 1
+      
+      break;
+    }
+    case 9:
+    { //LB + A Active 1 0 0 0
+      
+      break;
+    }
+    case 10:
+    { //LB + B Active 1 0 0 1
+      
+      break;
+    }
+    case 11:
+    { //LB + X Active 1 0 1 0
+      
+      break;
+    }
+    case 12:
+    { //LB + Y Active 1 0 1 1
+      
+      break;
+    }
+    case 13:
+    { //RB + A Active 1 1 0 0
+    
+      break;
+    }
+    case 14:
+    { //RB + B Active 1 1 0 1
+      
+      break;
+    }
+    case 15:
+    { //RB + X Active 1 1 1 0
+      
+      break;
+    }
+    case 16:
+    { //RB + Y Active 1 1 1 1
+      
+      break;
+    }
+  }
+
+  // Some example procedures showing how to display to the pixels:
+  
+  /*
+  colorWipe(R.Color(255, 0, 0), 50); // Red
+  colorWipe(L.Color(255, 0, 0), 50); // Red
+  colorWipe(R.Color(0, 255, 0), 50); // Green
+  colorWipe(L.Color(0, 255, 0), 50); // Green
+  colorWipe(R.Color(0, 0, 255), 50); // Blue
+  colorWipe(L.Color(0, 0, 255), 50); // Blue
+  
+  */
+  
+  // Send a theater pixel chase in...
+  
+  /*
+  
+  theaterChase(R.Color(127, 127, 127), 50); // White
+  theaterChase(L.Color(127, 127, 127), 50); // White
+  theaterChase(R.Color(127,   0,   0), 50); // Red
+  theaterChase(L.Color(127,   0,   0), 50); // Red
+  theaterChase(R.Color(  0,   0, 127), 50); // Blue
+  theaterChase(L.Color(  0,   0, 127), 50); // Blue
+  */
+  //rainbow(20);
+  //rainbowCycle(10);
+  //theaterChaseRainbow(10);
+  
+  //Possible way to break out of long lighting function?
+  //if(analogRead(analogInPin) != 250){
+    //break;}
+  LightingMode = 0;
+}
+
+// Fill the dots one after the other with a color
+void colorWipe(uint32_t c, uint8_t wait) 
+{
+  for(uint16_t i=0; i<72; i++) 
+  {
+      R.setPixelColor(i, c);
+      L.setPixelColor(i, c);
+      R.show();
+      L.show();
+      delay(wait);
+  }
+}
+
+void rainbow(uint8_t wait) 
+{
+  uint16_t i, j;
+
+  for(j=0; j<256; j++) 
+  {
+    for(i=0; i<72; i++) 
+    {
+      R.setPixelColor(i, Wheel((i+j) & 255));
+      L.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    R.show();
+    L.show();
+    delay(wait);
+  }
+}
+
+//Needs fairly short wait times to be effective
+void rainbowStrobe(uint8_t wait) 
+{
+  uint16_t i, j, k;
+
+  for(j=0; j<256; j++) 
+  {
+    for(i=0; i<72; i++) 
+    {
+      R.setPixelColor(i, Wheel((i+j) & 255));
+      L.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    R.show();
+    L.show();
+    delay(wait);
+    
+    for(k=0; k<72; k++) 
+    {
+      R.setPixelColor(k, 0);
+      L.setPixelColor(k, 0);
+    }
+    R.show();
+    L.show();
+    delay(wait);
+  }
+}
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycle(uint8_t wait) 
+{
+  uint16_t i, j;
+
+  for(j=0; j<256*5; j++) 
+  { // 5 cycles of all colors on wheel
+    for(i=0; i<72; i++) 
+    {
+      R.setPixelColor(i, Wheel(((i * 256 / 72) + j) & 255));
+      L.setPixelColor(i, Wheel(((i * 256 / 72) + j) & 255));
+    }
+    R.show();
+    L.show();
+    delay(wait);
+  }
+}
+
+//Theatre-style crawling lights.
+void theaterChase(uint32_t c, uint8_t wait) 
+{
+  for (int j=0; j<10; j++) 
+  {  //do 10 cycles of chasing
+    for (int q=0; q < 3; q++) 
+    {
+      for (int i=0; i<72; i=i+3) 
+      {
+        R.setPixelColor(i+q, c);    //turn every third pixel on
+        L.setPixelColor(i+q, c);    //turn every third pixel on
+      }
+      R.show();
+      L.show();
+     
+      delay(wait);
+     
+      for (int i=0; i<72; i=i+3) 
+      {
+        R.setPixelColor(i+q, 0);        //turn every third pixel off
+        L.setPixelColor(i+q, 0);        //turn every third pixel off
+      }
+    }
+  }
+}
+
+//Theatre-style crawling lights with rainbow effect
+void theaterChaseRainbow(uint8_t wait) 
+{
+  for (int j=0; j < 256; j++) 
+  {     // cycle all 256 colors in the wheel
+    for (int q=0; q < 3; q++) 
+    {
+      for (int i=0; i<72; i=i+3) 
+      {
+        R.setPixelColor(i+q, Wheel( (i+j) % 255));  
+        //turn every third pixel on  
+        L.setPixelColor(i+q, Wheel( (i+j) % 255));  
+        //turn every third pixel on 
+      }
+      R.show();
+      L.show();
+       
+      delay(wait);
+       
+      for (int i=0; i<72; i=i+3) 
+      {
+        R.setPixelColor(i+q, 0);
+        //turn every third pixel off        
+        L.setPixelColor(i+q, 0);
+        //turn every third pixel off  
+      }
+    }
+  }
+}
+
+uint32_t Wheel(byte WheelPos) 
+{
+  if(WheelPos < 85) 
+  {
+    return R.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
+  else if(WheelPos < 170) 
+  {
+    WheelPos -= 85;
+    return R.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  else 
+  {
+    WheelPos -= 170;
+    return R.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+}
