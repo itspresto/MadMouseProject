@@ -1,0 +1,184 @@
+#include <SPI.h>
+#include <Ethernet.h>
+#include <RobotOpen.h>
+
+/* I/O Setup */
+USBJoystick usb1('0');  // Assign the logitech USBJoystick object to bundle 0
+
+/* Global Variables */
+uint8_t LightingMode = 0;
+
+/* Communication Pins */
+int comm1 = A0;
+int comm4 = A1;
+int comm3 = A2;
+int comm2 = A3;
+
+void setup()
+{
+  /* Initiate comms */
+  RobotOpen.begin();
+  /* Initiate lighting comms */
+  pinMode(comm1, OUTPUT);
+  pinMode(comm2, OUTPUT);
+  pinMode(comm3, OUTPUT);
+  pinMode(comm4, OUTPUT);
+}
+
+
+/* This is your primary robot loop - all of your code
+ * should live here that allows the robot to operate
+ */
+void enabled() {
+  
+  /* Variable Library */
+  int LFINAL=0;
+  int RFINAL=0;
+  int LMID=0;
+  int RMID=0;
+  
+  // Initial reading of Joysticks
+  int LEFTS = usb1.makePWM(ANALOG_LEFTY, INVERT) - 127;
+  int RITES = usb1.makePWM(ANALOG_RIGHTY, NORMAL) - 127;
+ 
+  // Ternarys disregard slight bumps or deadzone interference
+  int smthL = (LEFTS >= 8 || LEFTS <= -8) ? LEFTS : 0;
+  int smthR = (RITES >= 8 || RITES <= -8) ? RITES : 0;
+  
+  //Set Robot MaxSpeed Here
+  LMID = smthL*.35;
+  RMID = smthR*.35;
+  
+  // Secondary smoothing for redundancy reasons
+  LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
+  RFINAL = (RMID >= 8 || RMID <= -8) ? RMID : 0;
+  
+  // Pushing final values to sidecar PWM Digital IOs
+  RobotOpen.setPWM(SIDECAR_PWM1, LFINAL + 130);
+  RobotOpen.setPWM(SIDECAR_PWM2, LFINAL + 130);
+  RobotOpen.setPWM(SIDECAR_PWM3, RFINAL + 128);
+  RobotOpen.setPWM(SIDECAR_PWM4, RFINAL + 128);
+
+  /*Set Lighting*/
+  LightingMode = 2;  
+}
+
+
+/* This is called while the robot is disabled
+ * You must make sure to set all of your outputs
+ * to safe/disable values here
+ */
+void disabled() {
+  // PWMs are automatically disabled
+  
+  /*Set Lighting*/
+  LightingMode = 1;
+}
+
+
+/* This loop ALWAYS runs - only place code here that can run during a disabled state
+ * This is also a good spot to put driver station publish code
+ * You can use either publishAnalog, publishDigital, publishByte, publishShort, or publishLong
+ * Specify a bundle ID with a single character (a-z, A-Z, 0-9) - Just make sure not to use the same twice!
+ */
+void timedtasks() {
+  
+  //Publish DS Information
+  RobotOpen.publishAnalog(ANALOG0, 'A:');        // Bundle A
+  RobotOpen.publishDigital(SIDECAR_PWM1, '1');   // Bundle Sidecar 1
+  RobotOpen.publishDigital(SIDECAR_PWM2, '2');   // Bundle Sidecar 2
+  RobotOpen.publishDigital(SIDECAR_PWM3, '3');   // Bundle Sidecar 3
+  RobotOpen.publishDigital(SIDECAR_PWM4, '4');   // Bundle Sidecar 4
+
+  /* Button Parser for LightingMode */
+  if((usb1.getBtn(BTN1, NORMAL)) == 1) // BTN A
+  {
+    LightingMode = 5;
+    if((usb1.getBtn(BTN5, NORMAL)) == 1) /* LB */ {LightingMode = 9;}
+    else if((usb1.getBtn(BTN6, NORMAL)) == 1) /* RB */ {LightingMode = 13;}
+  }
+  else if((usb1.getBtn(BTN2, NORMAL)) == 1) // BTN B
+  {
+    LightingMode = 6;
+    if((usb1.getBtn(BTN5, NORMAL)) == 1) /* LB */ {LightingMode = 10;}
+    else if((usb1.getBtn(BTN6, NORMAL)) == 1) /* RB */ {LightingMode = 14;}    
+  }  
+  else if((usb1.getBtn(BTN3, NORMAL)) == 1) // BTN X
+  {
+    LightingMode = 7;
+    if((usb1.getBtn(BTN5, NORMAL)) == 1) /* LB */ {LightingMode = 11;}
+    else if((usb1.getBtn(BTN6, NORMAL)) == 1) /* RB */ {LightingMode = 15;}    
+  }
+  else if((usb1.getBtn(BTN4, NORMAL)) == 1) // BTN Y
+  {
+    LightingMode = 8;
+    if((usb1.getBtn(BTN5, NORMAL)) == 1) /* LB */ {LightingMode = 12;}
+    else if((usb1.getBtn(BTN6, NORMAL)) == 1) /* RB */ {LightingMode = 16;}    
+  }
+  /* Switch Case for LightingMode */
+  switch(LightingMode)
+  {
+    case 1:
+    { //disabled 0 0 0 0
+    digitalWrite(comm1, LOW); digitalWrite(comm2, LOW); digitalWrite(comm3, LOW); digitalWrite(comm4, LOW); break;}
+    case 2:
+    { //enabled, default 0 0 0 1
+    digitalWrite(comm1, LOW); digitalWrite(comm2, LOW); digitalWrite(comm3, LOW); digitalWrite(comm4, HIGH); break;}
+    case 3:
+    { //LB Active 0 0 1 0
+    digitalWrite(comm1, LOW); digitalWrite(comm2, LOW); digitalWrite(comm3, HIGH); digitalWrite(comm4, LOW); break;}
+    case 4:
+    { //RB Active 0 0 1 1
+    digitalWrite(comm1, LOW); digitalWrite(comm2, LOW); digitalWrite(comm3, HIGH); digitalWrite(comm4, HIGH); break;}
+    case 5:
+    { //A Active 0 1 0 0
+    digitalWrite(comm1, LOW); digitalWrite(comm2, HIGH); digitalWrite(comm3, LOW); digitalWrite(comm4, LOW); break;}
+    case 6:
+    { //B Active 0 1 0 1
+    digitalWrite(comm1, LOW); digitalWrite(comm2, HIGH); digitalWrite(comm3, LOW); digitalWrite(comm4, HIGH); break;}
+    case 7:
+    { //X Active 0 1 1 0
+    digitalWrite(comm1, LOW); digitalWrite(comm2, HIGH); digitalWrite(comm3, HIGH); digitalWrite(comm4, LOW); break;}
+    case 8:
+    { //Y Active 0 1 1 1
+    digitalWrite(comm1, LOW); digitalWrite(comm2, HIGH); digitalWrite(comm3, HIGH); digitalWrite(comm4, HIGH); break;}
+    case 9:
+    { //LB + A Active 1 0 0 0
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, LOW); digitalWrite(comm3, LOW); digitalWrite(comm4, LOW); break;}
+    case 10:
+    { //LB + B Active 1 0 0 1
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, LOW); digitalWrite(comm3, LOW); digitalWrite(comm4, HIGH); break;}
+    case 11:
+    { //LB + X Active 1 0 1 0
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, LOW); digitalWrite(comm3, HIGH); digitalWrite(comm4, LOW); break;}
+    case 12:
+    { //LB + Y Active 1 0 1 1
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, LOW); digitalWrite(comm3, HIGH); digitalWrite(comm4, HIGH); break;}
+    case 13:
+    { //RB + A Active 1 1 0 0
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, HIGH); digitalWrite(comm3, LOW); digitalWrite(comm4, LOW); break;}
+    case 14:
+    { //RB + B Active 1 1 0 1
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, HIGH); digitalWrite(comm3, LOW); digitalWrite(comm4, HIGH); break;}
+    case 15:
+    { //RB + X Active 1 1 1 0
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, HIGH); digitalWrite(comm3, HIGH); digitalWrite(comm4, LOW); break;}
+    case 16:
+    { //RB + Y Active 1 1 1 1
+    digitalWrite(comm1, HIGH); digitalWrite(comm2, HIGH); digitalWrite(comm3, HIGH); digitalWrite(comm4, HIGH); break;}
+  }
+}
+
+
+/* This is the main program loop that keeps comms operational
+ * DO NOT TOUCH UNDER ANY CIRCUMSTANCES
+ */
+void loop() {
+  RobotOpen.pollDS();
+  if (RobotOpen.enabled())
+    enabled();
+  else
+    disabled();
+  timedtasks();
+  RobotOpen.outgoingDS();
+}
