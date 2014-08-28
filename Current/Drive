@@ -18,6 +18,7 @@ void setup()
 {
   /* Initiate comms */
   RobotOpen.begin();
+  
   /* Initiate lighting comms */
   pinMode(comm1, OUTPUT);
   pinMode(comm2, OUTPUT);
@@ -26,12 +27,10 @@ void setup()
 }
 
 
-/* This is your primary robot loop - all of your code
- * should live here that allows the robot to operate
- */
+/* This is the primary robot loop */
 void enabled() {
   
-  /* Variable Library */
+  /* Transferring Variable Library */
   int LFINAL=0;
   int RFINAL=0;
   int LMID=0;
@@ -46,8 +45,8 @@ void enabled() {
   int smthR = (RITES >= 8 || RITES <= -8) ? RITES : 0;
   
   //Set Robot MaxSpeed Here
-  LMID = smthL*.35;
-  RMID = smthR*.35;
+  LMID = smthL*.40;
+  RMID = smthR*.40;
   
   // Secondary smoothing for redundancy reasons
   LFINAL = (LMID >= 8 || LMID <= -8) ? LMID : 0;
@@ -115,7 +114,9 @@ void timedtasks() {
     if((usb1.getBtn(BTN5, NORMAL)) == 1) /* LB */ {LightingMode = 12;}
     else if((usb1.getBtn(BTN6, NORMAL)) == 1) /* RB */ {LightingMode = 16;}    
   }
+  
   /* Switch Case for LightingMode */
+  //================================================================================================================
   switch(LightingMode)
   {
     case 1:
