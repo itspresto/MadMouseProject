@@ -30,32 +30,44 @@ void setup()
 
 void loop() 
 { 
+  int A = digitalRead(comm1);
+  int B = digitalRead(comm2);
+  int C = digitalRead(comm3);
+  int D = digitalRead(comm4);
+ 
   /* Multiplex Out for Setting up the LighingMode */
-  if(digitalRead(comm1) == LOW){
-    if(digitalRead(comm2) == LOW){
-      if(digitalRead(comm3) == LOW){
-        if(digitalRead(comm4) == LOW)
-        {
-          LightingMode = 1; // 0 0 0 0
-        }
-        else if(digitalRead(comm4) == HIGH)
-        {
-          LightingMode = 2; // 0 0 0 1
-        }
-      }
-      if(digitalRead(comm3) == HIGH){
-        if(digitalRead(comm4) == LOW)
-        {
-          LightingMode = 3; // 0 0 1 0
-        }
-        else if(digitalRead(comm4) == HIGH)
-        {
-          LightingMode = 4; // 0 0 1 1
-        }
-      }
-    }
-
-  
+  if((A==LOW)&&(B==LOW)&&(C==LOW)&&(D==LOW)){
+    LightingMode = 1;}
+  if((A==LOW)&&(B==LOW)&&(C==LOW)&&(D==HIGH)){
+    LightingMode = 2;}
+  if((A==LOW)&&(B==LOW)&&(C==HIGH)&&(D==LOW)){
+    LightingMode = 3;}
+  if((A==LOW)&&(B==LOW)&&(C==HIGH)&&(D==HIGH)){
+    LightingMode = 4;}
+  if((A==LOW)&&(B==HIGH)&&(C==LOW)&&(D==LOW)){
+    LightingMode = 5;}
+  if((A==LOW)&&(B==HIGH)&&(C==LOW)&&(D==HIGH)){
+    LightingMode = 6;}
+  if((A==LOW)&&(B==HIGH)&&(C==HIGH)&&(D==LOW)){
+    LightingMode = 7;}
+  if((A==LOW)&&(B==HIGH)&&(C==HIGH)&&(D==HIGH)){
+    LightingMode = 8;}    
+  if((A==HIGH)&&(B==LOW)&&(C==LOW)&&(D==LOW)){
+    LightingMode = 9;}
+  if((A==HIGH)&&(B==LOW)&&(C==LOW)&&(D==HIGH)){
+    LightingMode = 10;}
+  if((A==HIGH)&&(B==LOW)&&(C==HIGH)&&(D==LOW)){
+    LightingMode = 11;}
+  if((A==HIGH)&&(B==LOW)&&(C==HIGH)&&(D==HIGH)){
+    LightingMode = 12;}
+  if((A==HIGH)&&(B==HIGH)&&(C==LOW)&&(D==LOW)){
+    LightingMode = 13;}
+  if((A==HIGH)&&(B==HIGH)&&(C==LOW)&&(D==HIGH)){
+    LightingMode = 14;}
+  if((A==HIGH)&&(B==HIGH)&&(C==HIGH)&&(D==LOW)){
+    LightingMode = 15;}
+  if((A==HIGH)&&(B==HIGH)&&(C==HIGH)&&(D==HIGH)){
+    LightingMode = 16;}
   /* Switch Case for LightingMode 
      This is where you customize LED Display paramaters
   */
@@ -69,11 +81,11 @@ void loop()
     case 2:
     { //enabled, default 0 0 0 1
       theaterChase(L.Color(0,   20,   0), 25); // Green
-      break
+      break;
     }
     case 3:
     { //LB Active 0 0 1 0
-      //rainbowStrobe(10);
+      theaterChase(L.Color(0,   0,   20), 25); // Blue
       break;
     }
     case 4:
@@ -83,62 +95,62 @@ void loop()
     }
     case 5:
     { //A Active 0 1 0 0
-      
+      theaterChase(L.Color(0,   0,   20), 25); // Blue
       break;
     }
     case 6:
     { //B Active 0 1 0 1
-      
+      theaterChase(L.Color(20,   0,   20), 25); // Blue
       break;
     }
     case 7:
     { //X Active 0 1 1 0
-      
+      theaterChase(L.Color(0,   20,   20), 25); // Blue
       break;
     }
     case 8:
     { //Y Active 0 1 1 1
-      
+      theaterChase(L.Color(20,   20,   20), 25); // Blue
       break;
     }
     case 9:
     { //LB + A Active 1 0 0 0
-      
+      theaterChase(L.Color(120, 0, 0), 25);
       break;
     }
     case 10:
     { //LB + B Active 1 0 0 1
-      
+      theaterChase(L.Color(0, 120, 0), 25);
       break;
     }
     case 11:
     { //LB + X Active 1 0 1 0
-      
+      theaterChase(L.Color(0, 0, 120), 25);
       break;
     }
     case 12:
     { //LB + Y Active 1 0 1 1
-      
+      theaterChase(L.Color(120, 120, 120), 25);
       break;
     }
     case 13:
     { //RB + A Active 1 1 0 0
-    
+      theaterChase(L.Color(60, 0, 0), 30);
       break;
     }
     case 14:
     { //RB + B Active 1 1 0 1
-      
+      theaterChase(L.Color(0, 60, 0), 30);
       break;
     }
     case 15:
     { //RB + X Active 1 1 1 0
-      
+      theaterChase(L.Color(0, 0, 60), 30);
       break;
     }
     case 16:
     { //RB + Y Active 1 1 1 1
-      
+      theaterChase(L.Color(60, 60, 60), 30);
       break;
     }
   }
